@@ -68,3 +68,35 @@ O usuário pode interagir com o processo através de uma interface gráfica insp
    ```bash
    git clone https://github.com/seu-usuario/App_CSTR.git
    cd App_CSTR
+
+## 🎮 Como Usar
+
+**Aba de Operação**
+
+- **Painel esquerdo:** contém a representação visual do tanque (nível e cor variam com a temperatura) e os sliders para ajustar as perturbações (vazão, temperatura, concentrações de entrada).
+
+- **Faceplates:** controladores de nível e temperatura. Clique em MAN para operar manualmente a válvula/potência, ou AUTO para deixar o PID atuar. O setpoint pode ser alterado no campo ou no slider.
+
+- **Gráficos:** exibem o histórico das variáveis de processo (nível, temperatura, concentrações e saídas dos controladores).
+
+**Aba de Configurações**
+
+- **Permite ajustar os parâmetros:**
+
+- **Ganhos dos controladores PID** (Kp, Ki, Kd).
+
+- **Parâmetros do processo:** coeficiente de válvula (Cv), área do tanque.
+
+- **Parâmetros cinéticos:** fatores pré-exponenciais (A1, A2), energias de ativação (E1, E2) e calores de reação (ΔH1, ΔH2).
+
+- **Clique em Aplicar Parâmetros para atualizar.**
+
+**Controles gerais**
+
+- **PAUSAR/RESUMIR:** interrompe ou retoma a simulação.
+
+- **RESETAR:** reinicia o reator com as condições iniciais.
+
+- **SALVAR DADOS:** exporta o histórico para um arquivo CSV.
+
+- **CAPTURA:** salva uma imagem da janela atual.
