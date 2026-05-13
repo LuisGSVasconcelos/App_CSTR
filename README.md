@@ -69,7 +69,7 @@ $$ r_2 = k_2 * C_C * C_A $$
 Onde:
 
 -  $ A_i $: fator pre-exponencial ($ m^3/mol.s $)
-- $ E_i $: energia de ativacao (J/mol)
+- $ E_i $: energia de ativacao ($J/mol$)
 - $ R = 8.314 J/mol.K $: constante universal dos gases
 - $ T $: temperatura absoluta (K)
 
