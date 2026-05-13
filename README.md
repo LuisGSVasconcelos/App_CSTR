@@ -81,7 +81,7 @@ $$
 $$
 
 $$
-\frac{dC_B}{dt} = \frac{F_{in}}{V}(C_B^{in} - C_B) - 2\,r_1
+\frac{dC_B}{dt} = \frac{F_{in}}{V}(C_B^{in} - C_B) - 2r_1
 $$
 
 $$
