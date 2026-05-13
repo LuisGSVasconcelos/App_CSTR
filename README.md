@@ -1,175 +1,164 @@
-# Simulador de Reator CSTR Nao-Isotermico para Etoxilacao
+# Simulador de Reator CSTR Não-Isotérmico para Etoxilação
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
 [![tkinter](https://img.shields.io/badge/UI-tkinter-ff69b4)](https://docs.python.org/3/library/tkinter.html)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Simulador educacional interativo** de um reator CSTR (*Continuous Stirred Tank Reactor*) nao-isotermico com cinetica de etoxilacao e controle PID. Desenvolvido para apoiar disciplinas de Pos-Graduacao em Engenharia Quimica, permitindo que estudantes experimentem conceitos de cinetica, balancos de massa/energia e controle de processos em tempo real.
+**Simulador educacional interativo** de um reator CSTR (*Continuous Stirred Tank Reactor*) não-isotérmico com cinética de etoxilação e controle PID. Desenvolvido para apoiar disciplinas de Pós-Graduação em Engenharia Química, permitindo que estudantes experimentem conceitos de cinética, balanços de massa/energia e controle de processos em tempo real.
 
 ![Interface do Simulador](cstr.jpg)
 
 ---
 
-## Sumario
+## Sumário
 
-- [Fundamentacao Teorica](#fundamentacao-teorica)
+- [Fundamentação Teórica](#fundamentação-teórica)
   - [Esquema Reacional](#esquema-reacional)
-  - [Cinetica Quimica](#cinetica-quimica)
-  - [Balanco de Massa](#balanco-de-massa)
-  - [Balanco de Energia](#balanco-de-energia)
-  - [Balanco de Volume](#balanco-de-volume)
+  - [Cinética Química](#cinética-química)
+  - [Balanço de Massa](#balanço-de-massa)
+  - [Balanço de Energia](#balanço-de-energia)
+  - [Balanço de Volume](#balanço-de-volume)
   - [Controle PID](#controle-pid)
 - [Estrutura do Projeto](#estrutura-do-projeto)
-- [Pre-requisitos](#pre-requisitos)
-- [Instalacao e Execucao](#instalacao-e-execução)
+- [Pré-requisitos](#pré-requisitos)
+- [Instalação e Execução](#instalação-e-execução)
 - [Funcionalidades](#funcionalidades)
 - [Guia de Uso](#guia-de-uso)
-  - [Painel de Operacao](#painel-de-operacao)
-  - [Parametros e Sintonia](#parametros-e-sintonia)
+  - [Painel de Operação](#painel-de-operação)
+  - [Parâmetros e Sintonia](#parâmetros-e-sintonia)
   - [Controles Gerais](#controles-gerais)
-- [Interpretacao de Resultados](#interpretacao-de-resultados)
-- [Extensoes Possiveis](#extensoes-possiveis)
-- [Referencias](#referencias)
+- [Interpretação de Resultados](#interpretação-de-resultados)
+- [Extensões Possíveis](#extensões-possíveis)
+- [Referências](#referências)
 - [Autor](#autor)
 
 ---
 
-## Fundamentacao Teorica
+## Fundamentação Teórica
 
 ### Esquema Reacional
 
-O reator modela duas reacoes exotermicas consecutivas:
+O reator modela duas reações exotérmicas consecutivas:
 
 ```
-(1)  A + B  -->  C        (reacao principal - formacao de surfactante)
-(2)  A + C  -->  D        (reacao secundaria - subproduto indesejado)
+(1)  A + B  -->  C        (reação principal — formação de surfactante)
+(2)  A + C  -->  D        (reação secundária — subproduto indesejado)
 ```
 
 Onde:
 
-| Simbolo | Componente      | Funcao                          |
+| Símbolo | Componente      | Função                          |
 |---------|-----------------|----------------------------------|
-| A       | Alcool graxo    | Reagente                         |
-| B       | Oxido de Etileno| Reagente gasoso                  |
+| A       | Álcool graxo    | Reagente                         |
+| B       | Óxido de Etileno| Reagente gasoso                  |
 | C       | Surfactante     | **Produto desejado**             |
-| D       | Subproduto      | Produto da reacao consecutiva    |
+| D       | Subproduto      | Produto da reação consecutiva    |
 
-### Cinetica Quimica
+### Cinética Química
 
-Ambas as reacoes seguem cinetica elementar de 2a ordem. A constante de velocidade e dada pela **Lei de Arrhenius**:
+Ambas as reações seguem cinética elementar de 2ª ordem. A constante de velocidade é dada pela **Lei de Arrhenius**:
 
+```
+k_i(T) = A_i * exp(-E_i / (R * T))
 
-$$ k_i(T) = A_i * exp(-E_i / (R * T)) $$
-
-$$ r_1 = k_1 * C_A * C_B $$
-$$ r_2 = k_2 * C_C * C_A $$
-
-
-
-Onde:
-
--  $ A_i $: fator pre-exponencial ($ m^3/mol.s $)
-- $ E_i $: energia de ativacao (J/mol)
-- $ R = 8.314 J/mol.K $: constante universal dos gases
-- $ T $: temperatura absoluta (K)
-
-### Balanco de Massa
-
-Para um CSTR com volume variavel, o balanco molar para cada especie i partindo de  
-
-$$ d(N_i)/dt = F_{in}.C_i^{in} - F_{out}.C_i + V * \sum {(nu_{ij} *)} $$
-
- resulta em:
-
-
-$$ dC_A/dt = (F_{in} / V) * (C_A^{in} - C_A) - r_1 - r_2 $$
-
-$$ dC_B/dt = (F_{in} / V) * (C_B^{in} - C_B) - 2*r_1 $$
-
-$$ dC_C/dt = (F_{in} / V) * (0 - C_C) + r_1 - r_2 $$
-
-$$ dC_D/dt = (F_{in} / V) * (0 - C_D) + r_2 $$
-
-### Balanco de Energia
-
-Para um CSTR nao-isotermico com camisa de aquecimento/resfriamento:
-
-$$
-dT/dt = \frac {[Q_{sensivel} + Q_{reacao} + Q_{jack}]} {(rho * Cp * V)} $$
+r_1 = k_1 * C_A * C_B
+r_2 = k_2 * C_C * C_A
+```
 
 Onde:
 
-- $Q_{sensivel} = F_{in} * rho * Cp * (T_{in} - T) $: calor sensivel da alimentação
-- $Q_{reacao} = -\Delta{H_1} * r_1 * V - \Delta{H_2} * r_2 * V $: calor liberado pelas reações
-- $Q_{jack}$: calor trocado com a camisa (split-range, veja abaixo)
-- $rho$: densidade da mistura $(kg/m^3)$
-- $Cp$: capacidade calorifica ($J/kg.K$)
+- `A_i`: fator pré-exponencial (m³/mol·s)
+- `E_i`: energia de ativação (J/mol)
+- `R = 8,314 J/mol·K`: constante universal dos gases
+- `T`: temperatura absoluta (K)
 
-### Balanco de Volume (Nivel)
+### Balanço de Massa
 
-O nivel no tanque e governado pela diferenca entre vazao de entrada e saida:
+Para um CSTR com volume variável, o balanço molar para cada espécie i partindo de `d(N_i)/dt = F_in·C_i^in - F_out·C_i + V·Σ(ν_ij·r_j)` resulta em:
 
-$$
-dV/dt = F_{in} - F_{out}
-$$
+```
+dC_A/dt = (F_in / V) * (C_A^in - C_A) - r_1 - r_2
+dC_B/dt = (F_in / V) * (C_B^in - C_B) - 2·r_1
+dC_C/dt = (F_in / V) * (0 - C_C) + r_1 - r_2
+dC_D/dt = (F_in / V) * (0 - C_D) + r_2
+```
+
+### Balanço de Energia
+
+Para um CSTR não-isotérmico com camisa de aquecimento/resfriamento:
+
+```
+dT/dt = [Q_sensível + Q_reação + Q_camisa] / (ρ · Cp · V)
+```
+
 Onde:
 
-$
-F_{out} = Cv * f * \sqrt{h}
-$
+- `Q_sensível = F_in · ρ · Cp · (T_in - T)`: calor sensível da alimentação
+- `Q_reação = -ΔH₁ · r₁ · V - ΔH₂ · r₂ · V`: calor liberado pelas reações
+- `Q_camisa`: calor trocado com a camisa (split-range)
+- `ρ`: densidade da mistura (kg/m³)
+- `Cp`: capacidade calorífica (J/kg·K)
 
-$ h = \frac{V }{Area}  $      (nivel)
+### Balanço de Volume (Nível)
 
-$f = \frac{OP}{100} $       (fratura de abertura da valvula)
+O nível no tanque é governado pela diferença entre vazão de entrada e saída:
 
+```
+dV/dt = F_in - F_out
+F_out = Cv · f · √h
 
-## Controle Termico Split-Range
+h = V / Area       (nível)
+f = OP / 100       (fração de abertura da válvula)
+```
 
-O sistema utiliza uma estrategia de faixa dividida (*split-range*) para acionar mutuamente exclusivos:
+### Controle Térmico Split-Range
+
+O sistema utiliza uma estratégia de faixa dividida (*split-range*) para acionar atuadores mutuamente exclusivos:
 
 | Sinal (%)      | Ação          | Atuador               |
 |----------------|---------------|-----------------------|
-| 0 - 49         | Resfriamento  | Valvula de agua fria  |
+| 0 – 49         | Resfriamento  | Válvula de água fria  |
 | 50             | Neutro        | Nenhum                |
-| 51 - 100       | Aquecimento   | Valvula de vapor      |
+| 51 – 100       | Aquecimento   | Válvula de vapor      |
 
 ### Controle PID
 
 Dois controladores PID operam em cascata:
 
-- **LIC-101 (Nivel)**: Kp = -60 (acao reversa: nivel alto -> saida diminui -> valvula fecha)
-- **TIC-101 (Temperatura)**: Kp = +8 (acao direta: temperatura alta -> saida aumenta -> resfria)
+- **LIC-101 (Nível)**: Kp = −60 (ação reversa: nível alto → saída diminui → válvula fecha)
+- **TIC-101 (Temperatura)**: Kp = +8 (ação direta: temperatura alta → saída aumenta → resfria)
 
-A equacao implementada:
+A equação implementada:
 
-$$
-u(t) = Kp * e(t) + Ki * \int{e dt} + Kd * \frac{de}{dt}
-$$
-$$
-e = SP - PV
-$$
+```
+u(t) = Kp · e(t) + Ki · ∫e dt + Kd · de/dt   (e = SP − PV)
+```
 
 ---
 
 ## Estrutura do Projeto
 
-```text
+```
 App_CSTR/
-├── main.py                # Interface gráfica (sala de controle)
-├── model.py               # Modelo matemático do CSTR (EDOs)
-├── pid.py                 # Controlador PID digital com anti-windup
+│
+├── main.py                  # Interface gráfica (sala de controle)
+├── model.py                 # Modelo matemático do CSTR (EDOs)
+├── pid.py                   # Controlador PID digital com anti-windup
+│
 ├── components/
-│   ├── tank_widget.py     # Visualização animada do tanque (Canvas)
-│   └── faceplate.py       # Painel do controlador (DCS-style)
-├── cstr.jpg               # Screenshot da interface
-└── UFCG_logo_png.png      # Logotipo da universidade
+│   ├── tank_widget.py       # Visualização do tanque (Canvas)
+│   └── faceplate.py         # Painel do controlador (estilo DCS)
+│
+├── cstr.jpg                 # Screenshot da interface
+├── UFCG_logo_png.png        # Logotipo da universidade
+└── README.md                # Este arquivo
 ```
 
-Cada modulo contem docstrings com as equacoes e a logica de modelagem, servindo tambem como material de consulta.
+Cada módulo contém docstrings com as equações e a lógica de modelagem, servindo também como material de consulta.
 
 ---
 
-## Pre-requisitos
+## Pré-requisitos
 
 - **Python 3.8 ou superior**
 - Gerenciador de pacotes `pip`
@@ -177,22 +166,22 @@ Cada modulo contem docstrings com as equacoes e a logica de modelagem, servindo 
 
 ---
 
-## Instalacao e Execucao
+## Instalação e Execução
 
-1. Clone o repositorio:
+1. Clone o repositório:
 
 ```bash
 git clone https://github.com/LVasconcelos96/App_CSTR.git
 cd App_CSTR
 ```
 
-2. Instale as dependencias:
+2. Instale as dependências:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Caso nao exista `requirements.txt`, instale manualmente:
+Caso não exista `requirements.txt`, instale manualmente:
 
 ```bash
 pip install numpy pandas matplotlib pillow ttkbootstrap
@@ -208,116 +197,119 @@ python main.py
 
 ## Funcionalidades
 
-- **Modelagem fenomenologica** de CSTR com 2 reacoes exotermicas (cinetica de Arrhenius)
-- **Controladores PID** para nivel (LIC-101) e temperatura (TIC-101)
-- **Modo de operacao** AUTO (PID calcula) e MANUAL (operador define)
-- **Graficos dinamicos** em tempo real: nivel, temperatura, concentracoes, saidas dos controladores
-- **Slider de vazao** para aplicar perturbacoes na alimentacao
-- **Janela de historico** ajustavel (50 a 5000 s)
-- **Exportacao CSV** dos dados simulados
+- **Modelagem fenomenológica** de CSTR com 2 reações exotérmicas (cinética de Arrhenius)
+- **Controladores PID** para nível (LIC-101) e temperatura (TIC-101)
+- **Modo de operação** AUTO (PID calcula) e MANUAL (operador define)
+- **Gráficos dinâmicos** em tempo real: nível, temperatura, concentrações, saídas dos controladores
+- **Slider de vazão** para aplicar perturbações na alimentação
+- **Janela de histórico** ajustável (50 a 5000 s)
+- **Exportação CSV** dos dados simulados
 - **Captura de tela** da interface
-- **Placar de gamificacao** com razao produto/subproduto como metrica de desempenho
-- **Reset completo** da simulacao (modelo + PIDs + historico)
-- **Parametros editaveis**: ganhos PID, area do tanque, Cv da valvula, constantes cineticas
+- **Placar de gamificação** com razão produto/subproduto como métrica de desempenho
+- **Reset completo** da simulação (modelo + PIDs + histórico)
+- **Parâmetros editáveis**: ganhos PID, área do tanque, Cv da válvula, constantes cinéticas
 
 ---
 
 ## Guia de Uso
 
-### Painel de Operacao
+### Painel de Operação
 
-A aba principal apresenta uma divisao em dois paineis:
+A aba principal apresenta uma divisão em dois painéis:
 
 **Painel Esquerdo (Processo)**
 
-- **Tanque animado**: o nivel do liquido e a cor (azul = frio, vermelho = quente) refletem o estado do reator
-- **Slider de Vazao**: ajusta a perturbacao na alimentacao (F_in) em tempo real
-- **Janela do Grafico**: controla quantos segundos de historico sao exibidos nos graficos
-- **Concentracoes**: leitura numerica de CA, CB, CC, CD no reator
-- **Placar**: mostra tempo de simulacao, mols acumulados de produto (C) e subproduto (D), e a razao C/D como indicador de desempenho
+- **Tanque animado**: o nível do líquido e a cor (azul = frio, vermelho = quente) refletem o estado do reator
+- **Slider de Vazão**: ajusta a perturbação na alimentação (F_in) em tempo real
+- **Janela do Gráfico**: controla quantos segundos de histórico são exibidos nos gráficos
+- **Concentrações**: leitura numérica de CA, CB, CC, CD no reator
+- **Placar**: mostra tempo de simulação, mols acumulados de produto (C) e subproduto (D), e a razão C/D como indicador de desempenho
 
-**Painel Direito (Controle e Graficos)**
+**Painel Direito (Controle e Gráficos)**
 
-- **Faceplates**: LIC-101 (nivel) e TIC-101 (temperatura). Cada faceplate exibe:
+- **Faceplates**: LIC-101 (nível) e TIC-101 (temperatura). Cada faceplate exibe:
   - PV (Process Variable): valor medido em tempo real
-  - SP (Setpoint): valor desejado, editavel via campo ou slider
-  - OP (Output): sinal de saida (0-100%)
-  - Botoes AUTO/MAN para alternar o modo de operacao
-- **Graficos**: seis graficos atualizados a cada 0.5 s:
-  1. Nivel (m) — PV e SP
-  2. Temperatura (C) — PV e SP
-  3. Concentracao de Alcool (mol/m^3)
-  4. Abertura da valvula de saida (%)
-  5. Sinal termico split-range (0 = frio, 100 = vapor)
-  6. Concentracao de Surfactante (mol/m^3)
+  - SP (Setpoint): valor desejado, editável via campo ou slider
+  - OP (Output): sinal de saída (0–100%)
+  - Botões AUTO/MAN para alternar o modo de operação
+- **Gráficos**: seis gráficos atualizados a cada 0,5 s:
+  1. Nível (m) — PV e SP
+  2. Temperatura (°C) — PV e SP
+  3. Concentração de Álcool (mol/m³)
+  4. Abertura da válvula de saída (%)
+  5. Sinal térmico split-range (0 = frio, 100 = vapor)
+  6. Concentração de Surfactante (mol/m³)
 
-### Parametros e Sintonia
+### Parâmetros e Sintonia
 
-Na segunda aba, e possivel modificar:
+Na segunda aba, é possível modificar:
 
 **Controladores PID:**
 - Kp (ganho proporcional)
 - Ki (ganho integral)
 - Kd (ganho derivativo)
 
-Dica de sintonia: comecce ajustando Kp para a resposta desejada, depois Ki para eliminar offset e, por fim, Kd para amortecer oscilacoes.
+Dica de sintonia: comece ajustando Kp para a resposta desejada, depois Ki para eliminar *offset* e, por fim, Kd para amortecer oscilações.
 
 **Constantes do Sistema:**
-- Area da secao transversal (m^2)
-- Coeficiente de valvula Cv
-- Fatores pre-exponenciais (A1, A2) e energias de ativacao (E1, E2)
+- Área da seção transversal (m²)
+- Coeficiente de válvula Cv
+- Fatores pré-exponenciais (A₁, A₂) e energias de ativação (E₁, E₂)
 
-Apos alterar os valores, clique em **SALVAR ALTERACOES**.
+Após alterar os valores, clique em **SALVAR ALTERAÇÕES**.
 
 ### Controles Gerais
 
-| Botao         | Funcao                                       |
-|---------------|----------------------------------------------|
-| PAUSAR/RESUMIR| Interrompe ou retoma a simulacao             |
-| RESETAR       | Reinicia reator, PIDs, historico e placar    |
-| SALVAR DADOS  | Exporta o historico para CSV                 |
-| CAPTURA       | Salva screenshot da janela                   |
+| Botão           | Função                                       |
+|-----------------|----------------------------------------------|
+| PAUSAR/RESUMIR  | Interrompe ou retoma a simulação             |
+| RESETAR         | Reinicia reator, PIDs, histórico e placar    |
+| SALVAR DADOS    | Exporta o histórico para CSV                 |
+| CAPTURA         | Salva screenshot da janela                   |
 
 ---
 
-## Interpretacao de Resultados
+## Interpretação de Resultados
 
-- **Razao C/D > 10**: operacao excelente (alta seletividade ao produto desejado)
-- **Razao C/D entre 5 e 10**: atencao (formacao significativa de subproduto)
-- **Razao C/D < 5**: operacao ineficiente (reacao consecutiva predominante)
+- **Razão C/D > 10**: operação excelente (alta seletividade ao produto desejado)
+- **Razão C/D entre 5 e 10**: atenção (formação significativa de subproduto)
+- **Razão C/D < 5**: operação ineficiente (reação consecutiva predominante)
 
-A razao C/D e influenciada principalmente por:
-- Temperatura do reator (T alta favorece D, pois E2 > E1)
-- Tempo de residencia (vazao de alimentacao x nivel)
-- Concentracao de alimentacao de B
+A razão C/D é influenciada principalmente por:
+
+- **Temperatura do reator**: T alta favorece D, pois E₂ > E₁
+- **Tempo de residência**: vazão de alimentação × nível
+- **Concentração de alimentação de B**: excesso de EO acelera r₁, mas pode elevar T
 
 ---
 
-## Extensoes Possiveis
+## Extensões Possíveis
 
 Este simulador pode ser estendido academicamente para explorar:
 
-- **Controle em cascata** entre malhas de temperatura e vazao de refrigerante
-- **Controle feedforward** para rejeicao de perturbacoes na vazao de alimentacao
-- **Otimizacao em tempo real (RTO)** com funcao objetivo de maximizar razao C/D
-- **Estimacao de estados** (filtro de Kalman) para concentracoes nao medidas
+- **Controle em cascata** entre malhas de temperatura e vazão de refrigerante
+- **Controle feedforward** para rejeição de perturbações na vazão de alimentação
+- **Otimização em tempo real (RTO)** com função objetivo de maximizar razão C/D
+- **Estimação de estados** (filtro de Kalman) para concentrações não medidas
 - **Controle preditivo (MPC)** substituindo os PIDs
-- **Trocador de calor** explicito com balanco do lado da camisa
-- **Modelagem da cinetica** com ordens de reacao nao elementares
+- **Trocador de calor** explícito com balanço do lado da camisa
+- **Modelagem da cinética** com ordens de reação não elementares
+- **Análise de estabilidade** (múltiplos estados estacionários em CSTR não-isotérmico)
 
 ---
 
-## Referencias
+## Referências
 
 1. Fogler, H. S. (2016). *Elements of Chemical Reaction Engineering* (5th ed.). Prentice Hall.
 2. Seborg, D. E., Edgar, T. F., Mellichamp, D. A., & Doyle, F. J. (2016). *Process Dynamics and Control* (4th ed.). Wiley.
 3. Smith, J. M., Van Ness, H. C., & Abbott, M. M. (2005). *Introduction to Chemical Engineering Thermodynamics* (7th ed.). McGraw-Hill.
 4. Marlin, T. E. (2000). *Process Control: Designing Processes and Control Systems for Dynamic Performance* (2nd ed.). McGraw-Hill.
+5. Luyben, W. L. (1990). *Process Modeling, Simulation, and Control for Chemical Engineers* (2nd ed.). McGraw-Hill.
 
 ---
 
 ## Autor
 
-**Luis Vasconcelos** - Laboratorio LARCA | Universidade Federal de Campina Grande (UFCG)
+**Luis Vasconcelos** — Laboratório LARCA | Universidade Federal de Campina Grande (UFCG)
 
-*Disciplina: Controle de Processos - Graduação e Pos-Graduação em Engenharia Quimica*
+*Disciplina: Controle de Processos — Pós-Graduação em Engenharia Química*
