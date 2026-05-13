@@ -12,7 +12,6 @@
 
 ## Sumário
 
-<<<<<<< HEAD
 - [Fundamentação Teórica](#fundamentação-teórica)
   - [Esquema Reacional](#esquema-reacional)
   - [Cinética Química](#cinética-química)
@@ -31,26 +30,6 @@
 - [Interpretação de Resultados](#interpretação-de-resultados)
 - [Extensões Possíveis](#extensões-possíveis)
 - [Referências](#referências)
-=======
-- [Fundamentação Teórica](#fundamentacao-teorica)
-  - [Esquema Reacional](#esquema-reacional)
-  - [Cinética Química](#cinetica-quimica)
-  - [Balanço de Massa](#balanco-de-massa)
-  - [Balanco de Energia](#balanco-de-energia)
-  - [Balanco de Volume](#balanco-de-volume)
-  - [Controle PID](#controle-pid)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Pre-requisitos](#pre-requisitos)
-- [Instalação e Execução](#instalacao-e-execução)
-- [Funcionalidades](#funcionalidades)
-- [Guia de Uso](#guia-de-uso)
-  - [Painel de Operação](#painel-de-operacao)
-  - [Parâmetros e Sintonia](#parametros-e-sintonia)
-  - [Controles Gerais](#controles-gerais)
-- [Interpretação de Resultados](#interpretacao-de-resultados)
-- [Extensoes Possíveis](#extensoes-possiveis)
-- [Referências](#referencias)
->>>>>>> 825787b6a07bbd659ba53156a684a1f32b439f5b
 - [Autor](#autor)
 
 ---
@@ -61,99 +40,99 @@
 
 O reator modela duas reações exotérmicas consecutivas:
 
-```
-(1)  A + B  -->  C        (reação principal — formação de surfactante)
-(2)  A + C  -->  D        (reação secundária — subproduto indesejado)
-```
+$$(1)\quad A + B \;\xrightarrow{k_1}\; C \qquad (\text{reação principal — formação de surfactante})$$
+$$(2)\quad A + C \;\xrightarrow{k_2}\; D \qquad (\text{reação secundária — subproduto indesejado})$$
 
 Onde:
 
-| Símbolo | Componente      | Função                          |
-|---------|-----------------|----------------------------------|
-| A       | Álcool graxo    | Reagente                         |
-| B       | Óxido de Etileno| Reagente gasoso                  |
-| C       | Surfactante     | **Produto desejado**             |
-| D       | Subproduto      | Produto da reação consecutiva    |
+| Símbolo | Componente        | Função                          |
+|---------|-------------------|----------------------------------|
+| A       | Álcool graxo      | Reagente                         |
+| B       | Óxido de Etileno  | Reagente gasoso                  |
+| C       | Surfactante       | **Produto desejado**             |
+| D       | Subproduto        | Produto da reação consecutiva    |
 
 ### Cinética Química
 
 Ambas as reações seguem cinética elementar de 2ª ordem. A constante de velocidade é dada pela **Lei de Arrhenius**:
 
-```
-k_i(T) = A_i * exp(-E_i / (R * T))
+$$k_i(T) = A_i \cdot \exp\left(-\frac{E_i}{R \cdot T}\right)$$
 
-r_1 = k_1 * C_A * C_B
-r_2 = k_2 * C_C * C_A
-```
+$$r_1 = k_1 \cdot C_A \cdot C_B$$
+$$r_2 = k_2 \cdot C_C \cdot C_A$$
 
 Onde:
 
-- `A_i`: fator pré-exponencial (m³/mol·s)
-- `E_i`: energia de ativação (J/mol)
-- `R = 8,314 J/mol·K`: constante universal dos gases
-- `T`: temperatura absoluta (K)
+- $A_i$: fator pré-exponencial (m³/mol·s)
+- $E_i$: energia de ativação (J/mol)
+- $R = 8{,}314$ J/mol·K: constante universal dos gases
+- $T$: temperatura absoluta (K)
 
 ### Balanço de Massa
 
-Para um CSTR com volume variável, o balanço molar para cada espécie i partindo de `d(N_i)/dt = F_in·C_i^in - F_out·C_i + V·Σ(ν_ij·r_j)` resulta em:
+Para um CSTR com volume variável, parte-se do balanço molar geral:
 
-```
-dC_A/dt = (F_in / V) * (C_A^in - C_A) - r_1 - r_2
-dC_B/dt = (F_in / V) * (C_B^in - C_B) - 2·r_1
-dC_C/dt = (F_in / V) * (0 - C_C) + r_1 - r_2
-dC_D/dt = (F_in / V) * (0 - C_D) + r_2
-```
+$$\frac{d(N_i)}{dt} = F_{in} \cdot C_i^{in} - F_{out} \cdot C_i + V \sum_j \nu_{ij} \, r_j$$
+
+onde $N_i = V \cdot C_i$. Expandindo e substituindo $dV/dt = F_{in} - F_{out}$, obtém-se para cada espécie:
+
+$$
+\begin{aligned}
+\frac{dC_A}{dt} &= \frac{F_{in}}{V}(C_A^{in} - C_A) - r_1 - r_2 \\[6pt]
+\frac{dC_B}{dt} &= \frac{F_{in}}{V}(C_B^{in} - C_B) - 2\,r_1 \\[6pt]
+\frac{dC_C}{dt} &= \frac{F_{in}}{V}(0 - C_C) + r_1 - r_2 \\[6pt]
+\frac{dC_D}{dt} &= \frac{F_{in}}{V}(0 - C_D) + r_2
+\end{aligned}
+$$
 
 ### Balanço de Energia
 
 Para um CSTR não-isotérmico com camisa de aquecimento/resfriamento:
 
-```
-dT/dt = [Q_sensível + Q_reação + Q_camisa] / (ρ · Cp · V)
-```
+$$\frac{dT}{dt} = \frac{\dot{Q}_{sens} + \dot{Q}_{rxn} + \dot{Q}_{camisa}}{\rho \cdot C_p \cdot V}$$
 
 Onde:
 
-- `Q_sensível = F_in · ρ · Cp · (T_in - T)`: calor sensível da alimentação
-- `Q_reação = -ΔH₁ · r₁ · V - ΔH₂ · r₂ · V`: calor liberado pelas reações
-- `Q_camisa`: calor trocado com a camisa (split-range)
-- `ρ`: densidade da mistura (kg/m³)
-- `Cp`: capacidade calorífica (J/kg·K)
+- $\dot{Q}_{sens} = F_{in} \cdot \rho \cdot C_p \cdot (T_{in} - T)$: calor sensível da alimentação
+- $\dot{Q}_{rxn} = (-\Delta H_1) \cdot r_1 \cdot V + (-\Delta H_2) \cdot r_2 \cdot V$: calor liberado pelas reações
+- $\dot{Q}_{camisa}$: calor trocado com a camisa (controle split-range)
+- $\rho$: densidade da mistura (kg/m³)
+- $C_p$: capacidade calorífica (J/kg·K)
 
 ### Balanço de Volume (Nível)
 
 O nível no tanque é governado pela diferença entre vazão de entrada e saída:
 
-```
-dV/dt = F_in - F_out
-F_out = Cv · f · √h
+$$\frac{dV}{dt} = F_{in} - F_{out}$$
 
-h = V / Area       (nível)
-f = OP / 100       (fração de abertura da válvula)
-```
+A vazão de saída é modelada por uma válvula com comportamento de fluxo turbulento:
+
+$$F_{out} = C_v \cdot f \cdot \sqrt{h}$$
+
+$$h = \frac{V}{A_{rea}} \qquad f = \frac{OP}{100}$$
 
 ### Controle Térmico Split-Range
 
 O sistema utiliza uma estratégia de faixa dividida (*split-range*) para acionar atuadores mutuamente exclusivos:
 
-| Sinal (%)      | Ação          | Atuador               |
+| Sinal (%)     | Ação          | Atuador               |
 |----------------|---------------|-----------------------|
-| 0 – 49         | Resfriamento  | Válvula de água fria  |
-| 50             | Neutro        | Nenhum                |
-| 51 – 100       | Aquecimento   | Válvula de vapor      |
+| $0$ – $49$    | Resfriamento  | Válvula de água fria  |
+| $50$          | Neutro        | Nenhum                |
+| $51$ – $100$  | Aquecimento   | Válvula de vapor      |
 
 ### Controle PID
 
-Dois controladores PID operam em cascata:
+Dois controladores PID operam as malhas de nível e temperatura:
 
-- **LIC-101 (Nível)**: Kp = −60 (ação reversa: nível alto → saída diminui → válvula fecha)
-- **TIC-101 (Temperatura)**: Kp = +8 (ação direta: temperatura alta → saída aumenta → resfria)
+- **LIC-101 (Nível)**: $K_p = -60$ (ação reversa: nível alto $\rightarrow$ saída diminui $\rightarrow$ válvula fecha)
+- **TIC-101 (Temperatura)**: $K_p = +8$ (ação direta: temperatura alta $\rightarrow$ saída aumenta $\rightarrow$ resfria)
 
-A equação implementada:
+A equação do controlador na forma paralela:
 
-```
-u(t) = Kp · e(t) + Ki · ∫e dt + Kd · de/dt   (e = SP − PV)
-```
+$$u(t) = K_p \cdot e(t) + K_i \int_0^t e(\tau)\,d\tau + K_d \frac{de(t)}{dt}$$
+
+com $e(t) = SP - PV$ (erro = setpoint $-$ processo).
 
 ---
 
@@ -228,7 +207,7 @@ python main.py
 - **Captura de tela** da interface
 - **Placar de gamificação** com razão produto/subproduto como métrica de desempenho
 - **Reset completo** da simulação (modelo + PIDs + histórico)
-- **Parâmetros editáveis**: ganhos PID, área do tanque, Cv da válvula, constantes cinéticas
+- **Parâmetros editáveis**: ganhos PID, área do tanque, $C_v$ da válvula, constantes cinéticas
 
 ---
 
@@ -241,24 +220,24 @@ A aba principal apresenta uma divisão em dois painéis:
 **Painel Esquerdo (Processo)**
 
 - **Tanque animado**: o nível do líquido e a cor (azul = frio, vermelho = quente) refletem o estado do reator
-- **Slider de Vazão**: ajusta a perturbação na alimentação (F_in) em tempo real
+- **Slider de Vazão**: ajusta a perturbação na alimentação ($F_{in}$) em tempo real
 - **Janela do Gráfico**: controla quantos segundos de histórico são exibidos nos gráficos
-- **Concentrações**: leitura numérica de CA, CB, CC, CD no reator
+- **Concentrações**: leitura numérica de $C_A$, $C_B$, $C_C$, $C_D$ no reator
 - **Placar**: mostra tempo de simulação, mols acumulados de produto (C) e subproduto (D), e a razão C/D como indicador de desempenho
 
 **Painel Direito (Controle e Gráficos)**
 
 - **Faceplates**: LIC-101 (nível) e TIC-101 (temperatura). Cada faceplate exibe:
-  - PV (Process Variable): valor medido em tempo real
-  - SP (Setpoint): valor desejado, editável via campo ou slider
-  - OP (Output): sinal de saída (0–100%)
+  - PV (*Process Variable*): valor medido em tempo real
+  - SP (*Setpoint*): valor desejado, editável via campo ou *slider*
+  - OP (*Output*): sinal de saída ($0$–$100\%$)
   - Botões AUTO/MAN para alternar o modo de operação
-- **Gráficos**: seis gráficos atualizados a cada 0,5 s:
+- **Gráficos**: seis gráficos atualizados a cada $0{,}5$ s:
   1. Nível (m) — PV e SP
   2. Temperatura (°C) — PV e SP
   3. Concentração de Álcool (mol/m³)
   4. Abertura da válvula de saída (%)
-  5. Sinal térmico split-range (0 = frio, 100 = vapor)
+  5. Sinal térmico *split-range* ($0$ = frio, $100$ = vapor)
   6. Concentração de Surfactante (mol/m³)
 
 ### Parâmetros e Sintonia
@@ -266,16 +245,16 @@ A aba principal apresenta uma divisão em dois painéis:
 Na segunda aba, é possível modificar:
 
 **Controladores PID:**
-- Kp (ganho proporcional)
-- Ki (ganho integral)
-- Kd (ganho derivativo)
+- $K_p$ (ganho proporcional)
+- $K_i$ (ganho integral)
+- $K_d$ (ganho derivativo)
 
-Dica de sintonia: comece ajustando Kp para a resposta desejada, depois Ki para eliminar *offset* e, por fim, Kd para amortecer oscilações.
+Dica de sintonia: comece ajustando $K_p$ para a resposta desejada, depois $K_i$ para eliminar *offset* e, por fim, $K_d$ para amortecer oscilações.
 
 **Constantes do Sistema:**
 - Área da seção transversal (m²)
-- Coeficiente de válvula Cv
-- Fatores pré-exponenciais (A₁, A₂) e energias de ativação (E₁, E₂)
+- Coeficiente de válvula $C_v$
+- Fatores pré-exponenciais ($A_1$, $A_2$) e energias de ativação ($E_1$, $E_2$)
 
 Após alterar os valores, clique em **SALVAR ALTERAÇÕES**.
 
@@ -286,21 +265,21 @@ Após alterar os valores, clique em **SALVAR ALTERAÇÕES**.
 | PAUSAR/RESUMIR  | Interrompe ou retoma a simulação             |
 | RESETAR         | Reinicia reator, PIDs, histórico e placar    |
 | SALVAR DADOS    | Exporta o histórico para CSV                 |
-| CAPTURA         | Salva screenshot da janela                   |
+| CAPTURA         | Salva *screenshot* da janela                 |
 
 ---
 
 ## Interpretação de Resultados
 
-- **Razão C/D > 10**: operação excelente (alta seletividade ao produto desejado)
-- **Razão C/D entre 5 e 10**: atenção (formação significativa de subproduto)
-- **Razão C/D < 5**: operação ineficiente (reação consecutiva predominante)
+- **Razão C/D $> 10$**: operação excelente (alta seletividade ao produto desejado)
+- **Razão C/D entre $5$ e $10$**: atenção (formação significativa de subproduto)
+- **Razão C/D $< 5$**: operação ineficiente (reação consecutiva predominante)
 
 A razão C/D é influenciada principalmente por:
 
-- **Temperatura do reator**: T alta favorece D, pois E₂ > E₁
-- **Tempo de residência**: vazão de alimentação × nível
-- **Concentração de alimentação de B**: excesso de EO acelera r₁, mas pode elevar T
+- **Temperatura do reator**: $T$ alta favorece D, pois $E_2 > E_1$
+- **Tempo de residência**: vazão de alimentação $\times$ nível
+- **Concentração de alimentação de B**: excesso de EO acelera $r_1$, mas pode elevar $T$
 
 ---
 
@@ -309,7 +288,7 @@ A razão C/D é influenciada principalmente por:
 Este simulador pode ser estendido academicamente para explorar:
 
 - **Controle em cascata** entre malhas de temperatura e vazão de refrigerante
-- **Controle feedforward** para rejeição de perturbações na vazão de alimentação
+- **Controle *feedforward*** para rejeição de perturbações na vazão de alimentação
 - **Otimização em tempo real (RTO)** com função objetivo de maximizar razão C/D
 - **Estimação de estados** (filtro de Kalman) para concentrações não medidas
 - **Controle preditivo (MPC)** substituindo os PIDs
@@ -333,4 +312,4 @@ Este simulador pode ser estendido academicamente para explorar:
 
 **Luis Vasconcelos** — Laboratório LARCA | Universidade Federal de Campina Grande (UFCG)
 
-*Disciplina: Controle de Processos — Graduação e Pós-Graduação em Engenharia Química*
+*Disciplina: Controle de Processos — Pós-Graduação em Engenharia Química*
