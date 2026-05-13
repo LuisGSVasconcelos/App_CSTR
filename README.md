@@ -12,6 +12,7 @@
 
 ## Sumário
 
+<<<<<<< HEAD
 - [Fundamentação Teórica](#fundamentação-teórica)
   - [Esquema Reacional](#esquema-reacional)
   - [Cinética Química](#cinética-química)
@@ -30,6 +31,26 @@
 - [Interpretação de Resultados](#interpretação-de-resultados)
 - [Extensões Possíveis](#extensões-possíveis)
 - [Referências](#referências)
+=======
+- [Fundamentação Teórica](#fundamentacao-teorica)
+  - [Esquema Reacional](#esquema-reacional)
+  - [Cinética Química](#cinetica-quimica)
+  - [Balanço de Massa](#balanco-de-massa)
+  - [Balanco de Energia](#balanco-de-energia)
+  - [Balanco de Volume](#balanco-de-volume)
+  - [Controle PID](#controle-pid)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Pre-requisitos](#pre-requisitos)
+- [Instalação e Execução](#instalacao-e-execução)
+- [Funcionalidades](#funcionalidades)
+- [Guia de Uso](#guia-de-uso)
+  - [Painel de Operação](#painel-de-operacao)
+  - [Parâmetros e Sintonia](#parametros-e-sintonia)
+  - [Controles Gerais](#controles-gerais)
+- [Interpretação de Resultados](#interpretacao-de-resultados)
+- [Extensoes Possíveis](#extensoes-possiveis)
+- [Referências](#referencias)
+>>>>>>> 825787b6a07bbd659ba53156a684a1f32b439f5b
 - [Autor](#autor)
 
 ---
@@ -312,4 +333,4 @@ Este simulador pode ser estendido academicamente para explorar:
 
 **Luis Vasconcelos** — Laboratório LARCA | Universidade Federal de Campina Grande (UFCG)
 
-*Disciplina: Controle de Processos — Pós-Graduação em Engenharia Química*
+*Disciplina: Controle de Processos — Graduação e Pós-Graduação em Engenharia Química*
