@@ -1,10 +1,10 @@
-# Simulador de Reator CSTR Nao-Isotermico para Etoxilacao
+# Simulador de Reator CSTR Nao-Isotérmico para Etoxilacao
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
 [![tkinter](https://img.shields.io/badge/UI-tkinter-ff69b4)](https://docs.python.org/3/library/tkinter.html)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Simulador educacional interativo** de um reator CSTR (*Continuous Stirred Tank Reactor*) nao-isotermico com cinetica de etoxilacao e controle PID. Desenvolvido para apoiar disciplinas de Pos-Graduacao em Engenharia Quimica, permitindo que estudantes experimentem conceitos de cinetica, balancos de massa/energia e controle de processos em tempo real.
+**Simulador educacional interativo** de um reator CSTR (*Continuous Stirred Tank Reactor*) não-isotérmico com cinética de etoxilação e controle PID. Desenvolvido para apoiar disciplinas de Graduação e Pos-Graduação em Engenharia Química, permitindo que estudantes experimentem conceitos de cinética, balanços de massa/energia e controle de processos em tempo real.
 
 ![Interface do Simulador](cstr.jpg)
 
@@ -12,42 +12,42 @@
 
 ## Sumario
 
-- [Fundamentacao Teorica](#fundamentacao-teorica)
+- [Fundamentação Teórica](#fundamentacao-teorica)
   - [Esquema Reacional](#esquema-reacional)
-  - [Cinetica Quimica](#cinetica-quimica)
-  - [Balanco de Massa](#balanco-de-massa)
+  - [Cinética Química](#cinetica-quimica)
+  - [Balanço de Massa](#balanco-de-massa)
   - [Balanco de Energia](#balanco-de-energia)
   - [Balanco de Volume](#balanco-de-volume)
   - [Controle PID](#controle-pid)
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [Pre-requisitos](#pre-requisitos)
-- [Instalacao e Execucao](#instalacao-e-execução)
+- [Instalação e Execução](#instalacao-e-execução)
 - [Funcionalidades](#funcionalidades)
 - [Guia de Uso](#guia-de-uso)
-  - [Painel de Operacao](#painel-de-operacao)
-  - [Parametros e Sintonia](#parametros-e-sintonia)
+  - [Painel de Operação](#painel-de-operacao)
+  - [Parâmetros e Sintonia](#parametros-e-sintonia)
   - [Controles Gerais](#controles-gerais)
-- [Interpretacao de Resultados](#interpretacao-de-resultados)
-- [Extensoes Possiveis](#extensoes-possiveis)
-- [Referencias](#referencias)
+- [Interpretação de Resultados](#interpretacao-de-resultados)
+- [Extensoes Possíveis](#extensoes-possiveis)
+- [Referências](#referencias)
 - [Autor](#autor)
 
 ---
 
-## Fundamentacao Teorica
+## Fundamentação Teórica
 
 ### Esquema Reacional
 
-O reator modela duas reacoes exotermicas consecutivas:
+O reator modela duas reações exotérmicas consecutivas:
 
 ```
-(1)  A + B  -->  C        (reacao principal - formacao de surfactante)
-(2)  A + C  -->  D        (reacao secundaria - subproduto indesejado)
+(1)  A + B  -->  C        (reação principal - formacao de surfactante)
+(2)  A + C  -->  D        (reação secundária - subproduto indesejado)
 ```
 
 Onde:
 
-| Simbolo | Componente      | Funcao                          |
+| Símbolo | Componente      | Função                         |
 |---------|-----------------|----------------------------------|
 | A       | Alcool graxo    | Reagente                         |
 | B       | Oxido de Etileno| Reagente gasoso                  |
