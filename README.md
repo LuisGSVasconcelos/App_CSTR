@@ -137,7 +137,7 @@ Dois controladores PID operam as malhas de nível e temperatura:
 
 A equação do controlador na forma paralela:
 
-$$u(t) = K_p \cdot e(t) + K_i \int_0^t e(\tau)\,d\tau + K_d \frac{de(t)}{dt}$$
+$$u(t) = K_p \cdot e(t) + K_i \int_0^t e(\tau)\d\tau + K_d \frac{de(t)}{dt}$$
 
 com $e(t) = SP - PV$ (erro = setpoint $-$ processo).
 
