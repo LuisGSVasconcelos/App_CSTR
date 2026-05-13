@@ -79,8 +79,11 @@ onde $N_i = V \cdot C_i$. Expandindo e substituindo $dV/dt = F_{in} - F_{out}$, 
 $$
 \begin{aligned}
 \frac{dC_A}{dt} &= \frac{F_{in}}{V}(C_A^{in} - C_A) - r_1 - r_2 \\[6pt]
+
 \frac{dC_B}{dt} &= \frac{F_{in}}{V}(C_B^{in} - C_B) - 2\,r_1 \\[6pt]
+
 \frac{dC_C}{dt} &= \frac{F_{in}}{V}(0 - C_C) + r_1 - r_2 \\[6pt]
+
 \frac{dC_D}{dt} &= \frac{F_{in}}{V}(0 - C_D) + r_2
 \end{aligned}
 $$
