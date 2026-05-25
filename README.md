@@ -159,6 +159,8 @@ App_CSTR/
 │
 ├── cstr.jpg                 # Screenshot da interface
 ├── UFCG_logo_png.png        # Logotipo da universidade
+├── requirements.txt         # Dependências do projeto
+├── .cursorrules             # Configuração de assistente de código
 └── README.md                # Este arquivo
 ```
 
@@ -209,6 +211,7 @@ python main.py
 - **Controladores PID** para nível (LIC-101) e temperatura (TIC-101)
 - **Modo de operação** AUTO (PID calcula) e MANUAL (operador define)
 - **Gráficos dinâmicos** em tempo real: nível, temperatura, concentrações, saídas dos controladores
+- **Escala automática** dos eixos y nos gráficos — ajustam-se dinamicamente aos dados
 - **Slider de vazão** para aplicar perturbações na alimentação
 - **Janela de histórico** ajustável (50 a 5000 s)
 - **Exportação CSV** dos dados simulados
@@ -240,7 +243,7 @@ A aba principal apresenta uma divisão em dois painéis:
   - SP (*Setpoint*): valor desejado, editável via campo ou *slider*
   - OP (*Output*): sinal de saída ($0$–$100\%$)
   - Botões AUTO/MAN para alternar o modo de operação
-- **Gráficos**: seis gráficos atualizados a cada $0{,}5$ s:
+- **Gráficos**: seis gráficos atualizados a cada $0{,}5$ s, com **escala automática** no eixo y (exceto nas saídas dos controladores, que mantêm limite fixo $0$–$100\%$):
   1. Nível (m) — PV e SP
   2. Temperatura (°C) — PV e SP
   3. Concentração de Álcool (mol/m³)

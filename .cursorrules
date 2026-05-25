@@ -1,0 +1,41 @@
+# .cursorrules — Projeto App_CSTR
+
+## Identidade do Projeto
+Simulador educacional de reator CSTR não-isotérmico para etoxilação, desenvolvido para Pós-Graduação em Engenharia Química.
+
+## Estrutura
+- `main.py` — Interface gráfica (sala de controle com tkinter/ttkbootstrap)
+- `model.py` — Modelo matemático do CSTR (EDOs com Euler explícito)
+- `pid.py` — Controlador PID digital com anti-windup
+- `components/tank_widget.py` — Visualização do tanque
+- `components/faceplate.py` — Painel DCS do controlador
+
+## Convenções de Código
+
+### Idioma
+- Código (nomes de variáveis, classes, funções): **inglês**
+- Comentários e docstrings: **português** (público-alvo: alunos brasileiros)
+- Mensagens de commit: **português**
+
+### Estilo
+- Sem comentários inline desnecessários
+- Docstrings pedagógicas com equações em formato texto
+- Nomes de classes em PascalCase, funções/variáveis em snake_case
+- Constantes físicas em letras maiúsculas (R, Cp, etc.)
+- Importações no topo: stdlib → externos → internos
+
+### Modelagem (model.py)
+- Integração: Euler explícito com 5 sub-passos
+- Substanciar variáveis com np.clip() ou max() para evitar valores negativos
+- Acumuladores de produção (gamificação) mantidos no modelo
+
+### Interface (main.py)
+- Atualização de gráficos a cada 5 passos de simulação (if int(t * 10) % 5 == 0)
+- Buffer circular com pop(0) para histórico
+- Faceplates conectados a controladores PID via composição
+- Eixos y dos gráficos com escala automática (relim + autoscale_view)
+
+### Controlador (pid.py)
+- Erro = SP - PV (sempre)
+- Anti-windup condicional: integral só acumula quando não saturado
+- Kp < 0 → ação reversa; Kp > 0 → ação direta
