@@ -23,6 +23,7 @@ from components.faceplate import Faceplate
 #   - Alterar a vaz~ao de alimentacao
 #   - Alternar entre modo AUTO e MANUAL para cada malha
 #   - Salvar dados historico e capturar tela
+#   - Atualização: 24/05/2026
 # ============================================================
 
 class CSTRApp:
@@ -273,7 +274,6 @@ class CSTRApp:
         self.line_level_sp, = self.ax_level.plot(
             x_init, self.level_sp, 'w--', label='SP')
         self.ax_level.set_title("Nivel (m)")
-        self.ax_level.set_ylim(0, 5)
         self.ax_level.grid(True)
 
         self.line_level_op, = self.ax_level_op.plot(
@@ -287,7 +287,6 @@ class CSTRApp:
         self.line_temp_sp, = self.ax_temp.plot(
             x_init, self.temp_sp, 'w--', label='SP')
         self.ax_temp.set_title("Temperatura (C)")
-        self.ax_temp.set_ylim(30, 110)
         self.ax_temp.grid(True)
 
         self.line_temp_op, = self.ax_temp_op.plot(
@@ -299,13 +298,11 @@ class CSTRApp:
         self.line_CA, = self.ax_CA.plot(
             x_init, self.CA_pv, 'b-', label='CA (Alcool)')
         self.ax_CA.set_title("Conc. Alcool (mol/m3)")
-        self.ax_CA.set_ylim(0, 1100)
         self.ax_CA.grid(True)
 
         self.line_CC, = self.ax_CC.plot(
             x_init, self.CC_pv, 'm-', label='CC (Surfactante)')
         self.ax_CC.set_title("Conc. Surfactante (mol/m3)")
-        self.ax_CC.set_ylim(0, 1100)
         self.ax_CC.grid(True)
 
         self.fig.tight_layout()
@@ -619,6 +616,10 @@ class CSTRApp:
 
             self.line_CA.set_data(x_axis, self.CA_pv[-view:])
             self.line_CC.set_data(x_axis, self.CC_pv[-view:])
+
+            for ax in [self.ax_level, self.ax_temp, self.ax_CA, self.ax_CC]:
+                ax.relim()
+                ax.autoscale_view()
 
             self.canvas.draw_idle()
 
