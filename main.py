@@ -62,7 +62,7 @@ class CSTRApp:
         self.CB_in_nominal = 2000.0  # mol/m3
 
         # Historico para os graficos (buffer circular)
-        self.max_history = 5000
+        self.max_history = 10000
         self.current_view_len = 300
 
         initial_level = self.model.Volume / self.model.Area
