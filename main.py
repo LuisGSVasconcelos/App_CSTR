@@ -1,8 +1,11 @@
+import sys
 import tkinter as tk
 import ctypes
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from tkinter import filedialog, messagebox
+import matplotlib
+matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
@@ -519,6 +522,10 @@ class CSTRApp:
                 img.save(filename)
                 messagebox.showinfo("Sucesso",
                                     f"Salvo em:\n{filename}")
+        except ImportError:
+            messagebox.showerror("Erro",
+                "Captura de tela indisponivel neste sistema.\n"
+                "Use um atalho do sistema (Cmd+Shift+4 / PrtScn).")
         except Exception as e:
             messagebox.showerror("Erro",
                                  f"Screenshot falhou:\n{e}")
@@ -649,10 +656,11 @@ class CSTRApp:
 # PONTO DE ENTRADA
 # ============================================================
 if __name__ == "__main__":
-    try:
-        ctypes.windll.shcore.SetProcessDpiAwareness(1)
-    except Exception:
-        pass
+    if sys.platform == "win32":
+        try:
+            ctypes.windll.shcore.SetProcessDpiAwareness(1)
+        except Exception:
+            pass
     root = ttk.Window(themename="superhero")
     app = CSTRApp(root)
     root.mainloop()
