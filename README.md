@@ -214,7 +214,7 @@ python main.py
 - **Escala automática** dos eixos y nos gráficos — ajustam-se dinamicamente aos dados
 - **Slider de vazão** para aplicar perturbações na alimentação
 - **Janela de histórico** ajustável (50 a 5000 s)
-- **Exportação CSV** dos dados simulados
+- **Exportação CSV ou Excel** (XLSX) dos dados simulados
 - **Captura de tela** da interface
 - **Placar de gamificação** com razão produto/subproduto como métrica de desempenho
 - **Reset completo** da simulação (modelo + PIDs + histórico)
@@ -275,7 +275,7 @@ Após alterar os valores, clique em **SALVAR ALTERAÇÕES**.
 |-----------------|----------------------------------------------|
 | PAUSAR/RESUMIR  | Interrompe ou retoma a simulação             |
 | RESETAR         | Reinicia reator, PIDs, histórico e placar    |
-| SALVAR DADOS    | Exporta o histórico para CSV                 |
+| SALVAR DADOS    | Exporta o histórico para CSV ou XLSX          |
 | CAPTURA         | Salva *screenshot* da janela                 |
 
 ---

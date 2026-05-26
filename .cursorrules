@@ -9,6 +9,7 @@ Simulador educacional de reator CSTR não-isotérmico para etoxilação, desenvo
 - `pid.py` — Controlador PID digital com anti-windup
 - `components/tank_widget.py` — Visualização do tanque
 - `components/faceplate.py` — Painel DCS do controlador
+- `requirements.txt` — Dependências (inclui openpyxl para exportação XLSX)
 
 ## Convenções de Código
 
@@ -33,7 +34,9 @@ Simulador educacional de reator CSTR não-isotérmico para etoxilação, desenvo
 - Atualização de gráficos a cada 5 passos de simulação (if int(t * 10) % 5 == 0)
 - Buffer circular com pop(0) para histórico
 - Faceplates conectados a controladores PID via composição
+- Faceplates atualizados mesmo com simulação pausada (reflete OP manual)
 - Eixos y dos gráficos com escala automática (relim + autoscale_view)
+- Exportação de dados: CSV (to_csv) ou XLSX (to_excel com openpyxl)
 
 ### Controlador (pid.py)
 - Erro = SP - PV (sempre)

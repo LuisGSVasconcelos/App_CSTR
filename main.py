@@ -485,10 +485,16 @@ class CSTRApp:
             filename = filedialog.asksaveasfilename(
                 title="Salvar Historico",
                 defaultextension=".csv",
-                filetypes=[("CSV", "*.csv")],
+                filetypes=[
+                    ("CSV", "*.csv"),
+                    ("Excel", "*.xlsx"),
+                ],
                 initialfile="historico_etoxilacao.csv")
             if filename:
-                df.to_csv(filename, index=False)
+                if filename.endswith(".xlsx"):
+                    df.to_excel(filename, index=False, engine="openpyxl")
+                else:
+                    df.to_csv(filename, index=False)
                 messagebox.showinfo("Sucesso",
                                     f"Dados salvos em:\n{filename}")
         except Exception as e:
@@ -525,6 +531,10 @@ class CSTRApp:
             return
 
         if self.is_paused:
+            c_level = self.model.Volume / self.model.Area
+            c_temp = self.model.Temperature - 273.15
+            self.fp_level.update(c_level)
+            self.fp_temp.update(c_temp)
             self.root.after(100, self.update)
             return
 
