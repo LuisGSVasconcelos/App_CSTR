@@ -91,16 +91,22 @@ de fluxo turbulento (raiz quadrada do nível):
     f = OP / 100      (fração de abertura da válvula)
 
 ---------------------------------------------------------------------------
-CONTROLE TÉRMICO SPLIT-RANGE
+CONTROLE TÉRMICO SPLIT-RANGE (COM TEMPERATURA DOS FLUIDOS)
 ---------------------------------------------------------------------------
-O sistema utiliza uma estratégia split-range para controle de temperatura:
+O sistema utiliza uma estratégia split-range com dois fluidos térmicos:
 
-    Sinal 0-100% → duas ações mutuamente exclusivas:
-        [0% - 50%]  : Resfriamento — válvula de água fria abre
-        [50% - 100%] : Aquecimento  — válvula de vapor abre
-        50%          : Neutro (nem frio, nem vapor)
+    [0% - 50%] : Resfriamento — água de resfriamento a 25°C
+    [50% - 100%] : Aquecimento — vapor de baixa pressão (135°C)
+    50%        : Neutro (válvulas fechadas)
 
-Isto evita que os dois atuadores operem simultaneamente.
+A carga térmica é calculada com base na diferença de temperatura entre
+o fluido e o reator, garantindo comportamento fisicamente realista:
+
+    Q_cooling = UA_cooling * (T_coolant - T) * frac_cooling
+    Q_heating = UA_heating * (T_steam - T) * frac_heating
+
+Dessa forma, quando T → T_coolant, o resfriamento diminui naturalmente,
+impedindo que a temperatura do reator caia abaixo da água de resfriamento.
 
 ---------------------------------------------------------------------------
 INTEGRAÇÃO NUMÉRICA
@@ -134,6 +140,10 @@ class CSTR:
         deltaH1 : entalpia da reação 1 (J/mol) — negativa (exotérmica)
         deltaH2 : entalpia da reação 2 (J/mol) — negativa (exotérmica)
         R       : constante universal dos gases (J/mol·K)
+        T_coolant : temperatura da água de resfriamento (K) — padrão 298,15 (25°C)
+        T_steam : temperatura do vapor de aquecimento (K) — padrão 408,15 (135°C)
+        UA_cooling : coeficiente global U·A da camisa de resfriamento (W/K)
+        UA_heating : coeficiente global U·A do vapor de aquecimento (W/K)
     """
 
     def __init__(self, Area=3.75, H_max=4.0, Cv_out=0.03,
@@ -141,7 +151,9 @@ class CSTR:
                  A1=5.0e6, E1=75000.0,
                  A2=1.0e8, E2=90000.0,
                  deltaH1=-184000.0, deltaH2=-220000.0,
-                 R=8.314):
+                 R=8.314,
+                 T_coolant=298.15, T_steam=408.15,
+                 UA_cooling=333333.0, UA_heating=30120.0):
         self.Area = Area
         self.H_max = H_max
         self.Cv_out = Cv_out
@@ -154,6 +166,12 @@ class CSTR:
         self.deltaH1 = deltaH1
         self.deltaH2 = deltaH2
         self.R = R
+
+        # Parâmetros do sistema térmico split-range
+        self.T_coolant = T_coolant               # K (25°C — água de resfriamento)
+        self.T_steam = T_steam                   # K (135°C — vapor de baixa pressão)
+        self.UA_cooling = UA_cooling             # W/K (produto U·A da camisa de resfriamento)
+        self.UA_heating = UA_heating             # W/K (produto U·A do vapor)
 
         self.reset_to_start()
 
@@ -200,9 +218,11 @@ class CSTR:
         CB_in             : concentração de B na alimentação (mol/m³)
         Valve_Open_Pct    : abertura da válvula de saída (0 a 100%)
         Q_thermal_signal  : sinal split-range (0 a 100%)
-                            0 = máximo resfriamento
+                            0 = máximo resfriamento (água 25°C)
                             50 = neutro
-                            100 = máximo aquecimento
+                            100 = máximo aquecimento (vapor 135°C)
+                            A carga térmica real depende da diferença
+                            entre a temperatura do fluido e a do reator.
 
         Retorna
         -------
@@ -248,14 +268,18 @@ class CSTR:
             dCD_dt = (F_in * (0.0 - self.CD)) / V + r2
 
             # ----------------------------------------------------------
-            # Controle Térmico Split-Range
+            # Controle Térmico Split-Range (calor trocado por diferença de temperatura)
+            # Q_cooling = UA_c * (T_coolant - T) * frac
+            # Q_heating = UA_h * (T_steam - T) * frac
+            # A força motriz (ΔT) diminui conforme T se aproxima do fluido,
+            # impedindo temperaturas abaixo da água de resfriamento (25°C).
             # ----------------------------------------------------------
             if Q_thermal_signal < 50.0:
                 frac_cooling = (50.0 - Q_thermal_signal) / 50.0
-                Q_thermal = frac_cooling * (-4000000.0)
+                Q_thermal = self.UA_cooling * (self.T_coolant - T) * frac_cooling
             else:
                 frac_heating = (Q_thermal_signal - 50.0) / 50.0
-                Q_thermal = frac_heating * (2500000.0)
+                Q_thermal = self.UA_heating * (self.T_steam - T) * frac_heating
 
             # ----------------------------------------------------------
             # Balanço de Energia
